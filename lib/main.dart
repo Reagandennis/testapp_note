@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'add_item_form.dart';
@@ -68,6 +68,17 @@ class _ItemListScreenState extends State<ItemListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Test App'),
+        actions: [
+          IconButton(
+            icon: Row(
+              children: [
+                Icon(Icons.add),
+                Text('New'),
+              ],
+            ),
+            onPressed: () => _navigateToAddItem(context),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: _items.length,
@@ -84,12 +95,6 @@ class _ItemListScreenState extends State<ItemListScreen> {
             ),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _navigateToAddItem(context),
-        label: Text('New'),
-        icon: Icon(Icons.add),
-        backgroundColor: Colors.blue,
       ),
     );
   }
