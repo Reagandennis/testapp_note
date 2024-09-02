@@ -1,15 +1,13 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_const_constructors_in_immutables
+// ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
-import 'item.dart';
+import 'add_item_form.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(TestApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class TestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,34 +21,46 @@ class MyApp extends StatelessWidget {
 }
 
 class ItemListScreen extends StatefulWidget {
-  const ItemListScreen({super.key});
-
   @override
   _ItemListScreenState createState() => _ItemListScreenState();
 }
 
 class _ItemListScreenState extends State<ItemListScreen> {
-  List<Item> items = [];
-
-  void _addItem(String title, String description) {
-    setState(() {
-      items.add(Item(title: title, description: description));
-    });
-  }
+  final List<Map<String, String>> _items = [
+    {
+      'title': 'Rainforest Ecosystems',
+      'description': 'Discover the rich biodiversity found in rainforests, from towering trees to unique wildlife species.',
+    },
+    {
+      'title': 'Space Exploration',
+      'description': 'Learn about humanity’s journey to explore the cosmos, from the first moon landing to Mars missions.',
+    },
+    {
+      'title': 'Ancient Civilizations',
+      'description': 'Explore the mysteries and achievements of ancient civilizations like the Egyptians, Greeks, and Mayans.',
+    },
+    {
+      'title': 'Renewable Energy',
+      'description': 'Understand the importance of renewable energy sources like solar, wind, and hydro power in combating climate change.',
+    },
+  ];
 
   void _deleteItem(int index) {
     setState(() {
-      items.removeAt(index);
+      _items.removeAt(index);
     });
   }
 
-  void _showAddItemDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AddItemDialog(onAddItem: _addItem);
-      },
+  void _navigateToAddItem(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => AddItemForm(onSubmit: _addItem)),
     );
+  }
+
+  void _addItem(String title, String description) {
+    setState(() {
+      _items.add({'title': title, 'description': description});
+    });
   }
 
   @override
@@ -58,79 +68,29 @@ class _ItemListScreenState extends State<ItemListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Test App'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: _showAddItemDialog,
-          ),
-        ],
       ),
       body: ListView.builder(
-        itemCount: items.length,
+        itemCount: _items.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(items[index].title),
-            subtitle: Text(items[index].description),
-            trailing: IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () => _deleteItem(index),
+          return Card(
+            margin: EdgeInsets.all(10.0),
+            child: ListTile(
+              title: Text(_items[index]['title']!),
+              subtitle: Text(_items[index]['description']!),
+              trailing: IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () => _deleteItem(index),
+              ),
             ),
           );
         },
       ),
-    );
-  }
-}
-
-class AddItemDialog extends StatefulWidget {
-  final Function(String, String) onAddItem;
-
-  AddItemDialog({super.key, required this.onAddItem});
-
-  @override
-  _AddItemDialogState createState() => _AddItemDialogState();
-}
-
-class _AddItemDialogState extends State<AddItemDialog> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController =
-      TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Add Item'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _titleController,
-            decoration: InputDecoration(labelText: 'Item Title'),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: InputDecoration(labelText: 'Description'),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _navigateToAddItem(context),
+        label: Text('New'),
+        icon: Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
-      actions: [
-        TextButton(
-          child: Text('Cancel'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        ElevatedButton(
-          child: Text('Add Item'),
-          onPressed: () {
-            widget.onAddItem(
-              _titleController.text,
-              _descriptionController.text,
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
     );
   }
 }
