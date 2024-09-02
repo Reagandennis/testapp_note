@@ -25,59 +25,67 @@ class _AddItemFormState extends State<AddItemForm> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Item'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '*Indicates required fields',
-              style: TextStyle(color: Colors.red),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Item Title*',
-                border: OutlineInputBorder(),
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.05,
+          vertical: screenHeight * 0.02,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '*Indicates required fields',
+                style: TextStyle(color: Colors.red),
               ),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
+              SizedBox(height: screenHeight * 0.02),
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: 'Item Title*',
+                  border: OutlineInputBorder(),
+                ),
               ),
-              maxLines: 5,
-            ),
-            SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancel'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.blue,
-                  ),
+              SizedBox(height: screenHeight * 0.02),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  border: OutlineInputBorder(),
                 ),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text('Add Item'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                maxLines: 5,
+              ),
+              SizedBox(height: screenHeight * 0.03),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancel'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.blue,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    child: Text('Add Item'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

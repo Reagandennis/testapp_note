@@ -73,6 +73,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
             icon: Row(
               children: [
                 Icon(Icons.add),
+                SizedBox(width: 5), // Added spacing between icon and text
                 Text('New'),
               ],
             ),
@@ -84,7 +85,10 @@ class _ItemListScreenState extends State<ItemListScreen> {
         itemCount: _items.length,
         itemBuilder: (context, index) {
           return Card(
-            margin: EdgeInsets.all(10.0),
+            margin: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.05,
+              vertical: 10.0,
+            ),
             child: ListTile(
               title: Text(_items[index]['title']!),
               subtitle: Text(_items[index]['description']!),
